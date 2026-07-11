@@ -1,0 +1,13 @@
+[package]
+name = "logisticutils"
+version = "0.1.0"
+edition = "2021"
+build = "build.rs"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tauri = { version = "2.11", features = ["wry"] }
+
+[build-dependencies]
+tauri-build = { version = "2.6.3", features = [] }

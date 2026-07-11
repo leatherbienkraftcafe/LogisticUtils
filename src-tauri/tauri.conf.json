@@ -1,0 +1,19 @@
+{
+  "$schema": "https://tauri.app/v1/tauri.schema.json",
+  "productName": "LogisticUtils",
+  "version": "0.1.0",
+  "identifier": "com.example.logisticutils",
+  "build": {
+    "frontendDist": "../frontend/dist",
+    "devUrl": "http://localhost:4173"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "LogisticUtils",
+        "width": 1024,
+        "height": 768
+      }
+    ]
+  }
+}
