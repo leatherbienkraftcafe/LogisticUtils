@@ -1,0 +1,2 @@
+# LogisticUtils
+Amazon,Yahoo,Excelシートなどから配送先データを読み取って、各種配送処理に流すユーティリティ
