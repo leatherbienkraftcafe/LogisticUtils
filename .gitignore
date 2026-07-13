@@ -19,6 +19,7 @@
 /.tauri/*
 /src-tauri/target/
 /dist/
+/frontend/dist/
 
 # Node frontend (Tauri apps often use a web frontend)
 node_modules/
