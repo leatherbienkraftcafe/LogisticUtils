@@ -45,6 +45,41 @@
   function removeRow(index) {
     rows = rows.filter((_, i) => i !== index);
   }
+
+  let copyStatus = '';
+
+  async function copyForClickPost() {
+    const tsv = rows.map((row) => row.value).join('\t');
+    try {
+      await navigator.clipboard.writeText(tsv);
+      copyStatus = 'コピーしました。クリックポストなどの入力欄に貼り付けてください。';
+    } catch (err) {
+      copyStatus = `コピーに失敗しました: ${err}`;
+    }
+  }
+
+  let clickpostUrl = 'https://clickpost.jp/';
+  let browserStatus = '';
+
+  async function openClickPostBrowser() {
+    browserStatus = '';
+    try {
+      await invoke('open_clickpost_browser', { url: clickpostUrl });
+      browserStatus = 'ブラウザを開きました。画面上でログインなどを行ってください。';
+    } catch (err) {
+      browserStatus = `ブラウザの起動に失敗しました: ${err}`;
+    }
+  }
+
+  async function injectRows() {
+    browserStatus = '';
+    try {
+      const result = await invoke('inject_rows', { rows });
+      browserStatus = `連携結果: ${result.join(' / ')}`;
+    } catch (err) {
+      browserStatus = `データ連携に失敗しました: ${err}`;
+    }
+  }
 </script>
 
 <main>
@@ -76,6 +111,27 @@
         </tbody>
       </table>
       <button on:click={addRow}>行を追加</button>
+      <button on:click={copyForClickPost}>クリックポスト用にコピー（タブ区切り）</button>
+      {#if copyStatus}
+        <p class="status">{copyStatus}</p>
+      {/if}
+
+      {#if isTauri}
+        <div class="browser-panel">
+          <h3>ブラウザ連携（実験的）</h3>
+          <p class="hint">
+            専用の Chrome を起動し、認証はその画面で手動で行ってください。
+            対象欄への反映は <code>clickpost-field-map.json</code>（アプリの設定フォルダ）の
+            セレクタ設定に従います。未設定の項目は反映されません。
+          </p>
+          <input type="text" bind:value={clickpostUrl} placeholder="対象画面の URL" />
+          <button on:click={openClickPostBrowser}>ClickPostを開く</button>
+          <button on:click={injectRows}>データを連携</button>
+          {#if browserStatus}
+            <p class="status">{browserStatus}</p>
+          {/if}
+        </div>
+      {/if}
     </section>
   {/if}
 </main>
@@ -152,5 +208,31 @@
 
   .error {
     color: #da1e28;
+  }
+
+  .status {
+    color: #24a148;
+  }
+
+  .browser-panel {
+    margin-top: 24px;
+    padding: 16px;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+  }
+
+  .browser-panel input[type='text'] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+  }
+
+  .hint {
+    font-size: 0.9em;
+    color: #555;
   }
 </style>
