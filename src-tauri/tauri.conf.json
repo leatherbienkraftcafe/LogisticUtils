@@ -5,7 +5,7 @@
   "identifier": "com.example.logisticutils",
   "build": {
     "frontendDist": "../frontend/dist",
-    "devUrl": "http://localhost:4173"
+    "devUrl": "http://localhost:5173"
   },
   "app": {
     "windows": [
